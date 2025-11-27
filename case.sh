@@ -9,7 +9,6 @@ echo "create new files"
 echo "remove directory"
 echo " remove file"
 
-
 read_input () {
   read -p "Enter your choice (1-6) :" choice
 
@@ -46,7 +45,6 @@ then
       read -p "Enter the file name you want to delete : " file2
     fi
 fi
-
 
 case $choice in
 
