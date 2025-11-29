@@ -5,9 +5,6 @@ echo "Choose an option"
 echo "1)create new directory"
 echo "2)delete a directory"
 echo "3)list content of directory"
-
-##**** update file manager to process files as well****
-
 echo "4) create a file"
 echo "5) Add content to file"
 echo "6) add content at the beginning of the file"
@@ -20,31 +17,29 @@ echo "12) delete file"
 
 
 read_input () {
-  read -p "Enter your choice (1-12) :" choice
+  read -p "Enter your choice (1-12) :" choice file1
 
-if [[ $choice -eq 1 ]]
- then
-   read -p "Enter the directory name you want to create : " dir1
- fi
-
-if [[ $choice -eq 2 ]]
-then
-  read -p "Enter the directory name you want to delete : " dir2
-  if [[ -d $dir2 ]]
-  then
-    echo "Directory exists. I'll delete for you."
-  else
-    echo "Directory doesn't exist. Please give valid directory name." ; ls |grep /; echo "you can chose from here."
-    read -p "Enter the directory name you want to delete : " dir2
+if [[ $choice -eq 7 || $choice -eq 8 || $choice -eq 9 ]]
+    then
+      read -p "Enter the no. of lines : " n
   fi
-fi
+
+if [[ $choice -eq 10 ]]
+      then
+        read -p "Enter the no. of line range which content you want to display : " n1 n2
+  fi
+
+if [[ $choice -eq 11 ]]
+      then
+        read -p "Enter the file name source & destination : "  source destination
+  fi
 
 case $choice in
 
-1) mkdir $dir1
+1) mkdir $file1
   ;;
 
-2) rm -rf $dir2
+2) rm -rf $file1
   ;;
 
 3)
@@ -66,57 +61,7 @@ case $choice in
     ls
     fi
   ;;
-*)
-;;
-esac
 
-if [[ $choice -eq 4 ]]
- then
-   read -p "Enter the file name you want to create : " file1
-fi
-
-if [[ $choice -eq 5 ]]
-  then
-    read -p "Enter the file name in which you want to add content : " file1
-fi
-
- if [[ $choice -eq 6 ]]
-   then
-     read -p "Enter the file name in which you want to add content at the beginning: " file1
-  fi
-
-  if [[ $choice -eq 7 ]]
-    then
-      read -p "Enter the no. of lines and name of file : " n file1
-  fi
-
-  if [[ $choice -eq 8 ]]
-      then
-        read -p "Enter the no. of lines and name of file : " n file1
-  fi
-
-  if [[ $choice -eq 9 ]]
-      then
-        read -p "Enter the no. of line and name of file which content you want to display : " n file1
-  fi
-
-if [[ $choice -eq 10 ]]
-      then
-        read -p "Enter the no. of line range and name of file which content you want to display : " n1 file1 n2
-  fi
-
-if [[ $choice -eq 11 ]]
-      then
-        read -p "Enter the file name source & destination : "  file1 source destination
-  fi
-
-if [[ $choice -eq 12 ]]
-      then
-        read -p "Enter the file name you want to delete : " file1
-  fi
-
-
-case $choice in
 4) touch $file1
   ;;
 
