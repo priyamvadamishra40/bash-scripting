@@ -1,0 +1,82 @@
+---
+- name: UserManager Project Setup
+  hosts: localhost
+  become: true
+
+
+  vars:
+    users:
+      - { name: aman, uid: 2000, group: dev, shell: /bin/bash }
+      - { name: devansh, uid: 2001, group: dev, shell: /bin/bash }
+      - { name: sahil, uid: 2002, group: dev, shell: /bin/bash }
+      - { name: priya, uid: 2003, group: devops, shell: /bin/zsh }
+      - { name: rijwan, uid: 2004, group: devops, shell: /bin/zsh }
+      - { name: kunal, uid: 2005, group: devops, shell: /bin/zsh }
+      - { name: ankita, uid: 2006, group: admin, shell: /bin/sh }
+      - { name: mukesh, uid: 2007, group: admin, shell: /bin/sh }
+      - { name: bhawna, uid: 2008, group: admin, shell: /bin/sh }
+
+  tasks:
+    - name: Create groups
+      group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - dev
+        - devops
+        - admin
+
+
+    - name: Create users
+      user:
+          name: "{{ item.name }}"
+          uid: "{{ item.uid }}"
+          group: "{{ item.group }}"
+          shell: "{{ item.shell }}"
+          create_home: yes
+      loop: "{{ users }}"
+
+    - name: Set password expiry policy
+      command: change -M 120 -W 7 {{ item.name }}
+      loop: "{{ users }}"
+
+    - name: Create personal workspaces
+      file:
+        path: "/home/{{ item.name }}/workspace"
+        state: directory
+        owner: "{{ item.name }}"
+        group: "{{ item.group }}"
+        mode: '0750'
+      loop: "{{ users }}"
+
+
+    - name: Create project directories
+      file:
+        path: "/projects/{{ item }}"
+        state: directory
+        mode: '2775'
+      loop:
+          - WebApp
+          - API
+          - Mobile
+
+
+    - name: Create shared resources directory
+      file:
+        path: /shared/resources
+        state: directory
+        mode: '2777'
+
+
+    - name: Create archive directory
+      file:
+        path: /archive
+        state: directory
+        mode: '0555'
+
+
+    - name: Configure sudo for admin group
+      copy:
+        dest: /etc/sudoers.d/admin
+        content: "%admin ALL=(ALL) NOPASSWD:ALL"
+        mode: '0440'
